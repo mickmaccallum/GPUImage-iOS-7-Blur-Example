@@ -10,6 +10,8 @@
 
 @interface SecondViewController ()
 
+@property (strong , nonatomic) GPUImageView *gpuImageView;
+
 @end
 
 @implementation SecondViewController
@@ -17,7 +19,35 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+
+
+    self.gpuImageView = [[GPUImageView alloc] initWithFrame:self.view.bounds];
+    [self.gpuImageView setFillMode:kGPUImageFillModePreserveAspectRatioAndFill];
+
+    UIImage *image = [UIImage imageNamed:@"image.png"];
+
+    [self addBlurredImage:image toGPUImageView:self.gpuImageView];
+
+    [self.view addSubview:self.gpuImageView];
+
+}
+
+- (void)addBlurredImage:(UIImage *)image toGPUImageView:(GPUImageView *)imageView
+{
+    GPUImagePicture *stillImageSource = [[GPUImagePicture alloc] initWithImage:image];
+
+    GPUImageiOSBlurFilter *blurFilter = [GPUImageiOSBlurFilter new];
+    [blurFilter setSaturation:2.0];
+    [blurFilter setDownsampling:3.0];
+    [blurFilter setBlurRadiusInPixels:10.0];
+
+    [stillImageSource addTarget:blurFilter];
+
+    [blurFilter prepareForImageCapture];
+
+    [blurFilter addTarget:imageView];
+
+    [stillImageSource processImage];
 }
 
 - (void)didReceiveMemoryWarning

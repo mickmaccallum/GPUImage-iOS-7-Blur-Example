@@ -6,7 +6,9 @@
 //  Copyright (c) 2013 HappTech Development. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
+
+#import "GPUImage.h"
 
 @interface FirstViewController : UIViewController
 
